@@ -17,7 +17,7 @@ class SearchViewModel(
     var page: Int = 1
     val repositoryList = MutableLiveData<List<RepositoryEntity>>()
     val searchStatus = MutableLiveData<Boolean>()
-    var selectRepository = RepositoryEntity("", "", "", "", "", "")
+    var selectRepository = RepositoryEntity("", "", "", "", "", "", "")
 
     // 検索結果をクリアするメソッド
     fun clearRepositoryList() {

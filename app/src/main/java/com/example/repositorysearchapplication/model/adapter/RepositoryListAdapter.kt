@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.RepositoryListItemBinding
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
 
@@ -53,6 +55,9 @@ class RepositoryListViewHolder(
         binding.txtLanguage.text = item.language
         if (item.language == "null") {
             binding.txtLanguage.visibility = View.GONE
+        }
+        binding.imgOwner.load(item.avatarUrl) {
+            error(R.drawable.baseline_hide_image_24)
         }
     }
 }

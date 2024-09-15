@@ -60,6 +60,9 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
+    // Coil
+    implementation("io.coil-kt:coil:2.7.0")
+
     // Fragment
     implementation("androidx.fragment:fragment-ktx:1.8.3")
 }

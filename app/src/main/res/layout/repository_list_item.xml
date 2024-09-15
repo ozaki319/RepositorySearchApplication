@@ -5,51 +5,80 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/txtRepositoryName"
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="RepositoryName"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/imgStar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRepositoryName"
-        app:srcCompat="@drawable/baseline_star_rate_24" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtStargazersCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="StarCount"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgStar"
-        app:layout_constraintStart_toEndOf="@+id/imgStar"
-        app:layout_constraintTop_toTopOf="@+id/imgStar" />
+            <ImageView
+                android:id="@+id/imgOwner"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/txtRepositoryName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtRepositoryName" />
 
-    <TextView
-        android:id="@+id/txtLanguage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Language"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtStargazersCount"
-        app:layout_constraintStart_toEndOf="@+id/txtStargazersCount"
-        app:layout_constraintTop_toTopOf="@+id/txtStargazersCount"
-        app:layout_constraintVertical_bias="1.0" />
+            <TextView
+                android:id="@+id/txtRepositoryName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="RepositoryName"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgOwner"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgStar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtRepositoryName"
+                app:srcCompat="@drawable/baseline_star_rate_24" />
+
+            <TextView
+                android:id="@+id/txtStargazersCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="StarCount"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgStar"
+                app:layout_constraintStart_toEndOf="@+id/imgStar"
+                app:layout_constraintTop_toTopOf="@+id/imgStar" />
+
+            <TextView
+                android:id="@+id/txtLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Language"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/txtStargazersCount"
+                app:layout_constraintStart_toEndOf="@+id/txtStargazersCount"
+                app:layout_constraintTop_toTopOf="@+id/txtStargazersCount"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

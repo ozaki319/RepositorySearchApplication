@@ -7,4 +7,5 @@ data class RepositoryEntity(
     val language: String,
     val stargazersCount: String,
     val htmlUrl: String,
+    val avatarUrl: String,
 )

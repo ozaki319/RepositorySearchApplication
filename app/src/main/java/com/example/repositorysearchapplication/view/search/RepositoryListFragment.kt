@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.repositorysearchapplication.R
@@ -79,12 +78,12 @@ class RepositoryListFragment : Fragment() {
             LinearLayoutManager(this.context).apply {
                 orientation = LinearLayoutManager.VERTICAL
             }
-        binding.rvRepositoryList.addItemDecoration(
-            DividerItemDecoration(
-                this.context,
-                DividerItemDecoration.VERTICAL,
-            ),
-        )
+//        binding.rvRepositoryList.addItemDecoration(
+//            DividerItemDecoration(
+//                this.context,
+//                DividerItemDecoration.VERTICAL,
+//            ),
+//        )
 
         // RecyclerViewの最後のアイテムが完全に表示されたとき追加で読み込み
         binding.rvRepositoryList.addOnScrollListener(

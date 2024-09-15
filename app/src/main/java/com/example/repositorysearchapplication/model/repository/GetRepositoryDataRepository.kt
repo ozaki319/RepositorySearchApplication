@@ -40,6 +40,7 @@ class GetRepositoryDataRepository {
                 val language = itemObj.getString("language")
                 val stargazersCount = itemObj.getString("stargazers_count")
                 val htmlUrl = itemObj.getString("html_url")
+                val avatarUrl = ownerObj.getString("avatar_url")
                 // リストに追加
                 newList.add(
                     RepositoryEntity(
@@ -49,6 +50,7 @@ class GetRepositoryDataRepository {
                         language,
                         stargazersCount,
                         htmlUrl,
+                        avatarUrl,
                     ),
                 )
             }

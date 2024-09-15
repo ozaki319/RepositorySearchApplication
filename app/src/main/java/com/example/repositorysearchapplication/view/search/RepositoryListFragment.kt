@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentRepositoryListBinding
 import com.example.repositorysearchapplication.model.adapter.RepositoryListAdapter
@@ -29,6 +30,20 @@ class RepositoryListFragment : Fragment() {
     private inner class RepositoryListObserver : Observer<List<RepositoryEntity>> {
         override fun onChanged(value: List<RepositoryEntity>) {
             adapter.submitList(value)
+        }
+    }
+
+    private inner class SearchStatusObserver : Observer<Boolean> {
+        override fun onChanged(value: Boolean) {
+            if (value) {
+                binding.btnSearch.isEnabled = false
+                binding.txtSearchWord.isEnabled = false
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.btnSearch.isEnabled = true
+                binding.txtSearchWord.isEnabled = true
+                binding.progressBar.visibility = View.GONE
+            }
         }
     }
 
@@ -53,6 +68,11 @@ class RepositoryListFragment : Fragment() {
             RepositoryListObserver(),
         )
 
+        _searchViewModel.searchStatus.observe(
+            viewLifecycleOwner,
+            SearchStatusObserver(),
+        )
+
         // RecyclerViewの設定
         binding.rvRepositoryList.adapter = adapter
         binding.rvRepositoryList.layoutManager =
@@ -64,6 +84,25 @@ class RepositoryListFragment : Fragment() {
                 this.context,
                 DividerItemDecoration.VERTICAL,
             ),
+        )
+
+        // RecyclerViewの最後のアイテムが完全に表示されたとき追加で読み込み
+        binding.rvRepositoryList.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(
+                    recyclerView: RecyclerView,
+                    dx: Int,
+                    dy: Int,
+                ) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val layoutManager = binding.rvRepositoryList.layoutManager as LinearLayoutManager
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+
+                    if (lastVisibleItem == totalItemCount - 1) _searchViewModel.addRepositoryList()
+                }
+            },
         )
 
         // リストをクリックしたときの処理

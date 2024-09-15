@@ -16,6 +16,7 @@ class SearchViewModel(
     var searchWord: String = ""
     var page: Int = 1
     val repositoryList = MutableLiveData<List<RepositoryEntity>>()
+    val searchStatus = MutableLiveData<Boolean>()
     var selectRepository = RepositoryEntity("", "", "", "", "", "")
 
     // 検索結果をクリアするメソッド
@@ -27,6 +28,7 @@ class SearchViewModel(
     // 検索するメソッド
     fun addRepositoryList() {
         viewModelScope.launch {
+            searchStatus.value = true
             repositoryList.value =
                 _getRepositoryDataRepository.getRepositoryList(
                     searchWord,
@@ -34,6 +36,7 @@ class SearchViewModel(
                     repositoryList.value!!,
                 )
             page += 1
+            searchStatus.value = false
         }
     }
 }

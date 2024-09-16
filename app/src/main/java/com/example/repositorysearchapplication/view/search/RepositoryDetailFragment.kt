@@ -9,11 +9,18 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import coil.load
+import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentRepositoryDetailBinding
 import com.example.repositorysearchapplication.view.dialog.OpenBrowserDialogFragment
 import com.example.repositorysearchapplication.viewmodel.SearchViewModel
+import kotlinx.coroutines.launch
 
 class RepositoryDetailFragment : Fragment() {
     private var _binding: FragmentRepositoryDetailBinding? = null
@@ -35,6 +42,12 @@ class RepositoryDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        // アバター画像、リポジトリ名をセット
+        binding.txtRepositoryName.text = _searchViewModel.selectRepository.fullName
+        binding.imgOwner.load(_searchViewModel.selectRepository.avatarUrl) {
+            error(R.drawable.baseline_hide_image_24)
+        }
 
         // WebViewの設定
         binding.wvRepositoryDetail.webViewClient =
@@ -61,6 +74,24 @@ class RepositoryDetailFragment : Fragment() {
             }
         binding.wvRepositoryDetail.settings.javaScriptEnabled = true
         binding.wvRepositoryDetail.loadUrl(_searchViewModel.selectRepository.htmlUrl)
+
+        // お気に入り登録ボタンをクリックしたときの処理
+        binding.btnFavorite.setOnClickListener {
+            _searchViewModel.insertFavoriteRepository(_searchViewModel.selectRepository)
+        }
+
+        // ViewModelのFlowの購読
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    _searchViewModel.eventInsertFavoriteRepository.collect {
+                        Toast
+                            .makeText(context, "お気に入りに登録しました", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

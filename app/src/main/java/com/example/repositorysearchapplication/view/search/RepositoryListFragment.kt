@@ -72,18 +72,24 @@ class RepositoryListFragment : Fragment() {
             SearchStatusObserver(),
         )
 
+        // 検索ボタンをクリックしたときの処理
+        binding.btnSearch.setOnClickListener {
+            hideSoftKeyboard()
+            if (binding.txtSearchWord.text.isNullOrBlank()) {
+                Toast.makeText(context, "キーワードを入力してください", Toast.LENGTH_SHORT).show()
+            } else {
+                _searchViewModel.searchWord = binding.txtSearchWord.text.toString()
+                _searchViewModel.clearRepositoryList()
+                _searchViewModel.addRepositoryList()
+            }
+        }
+
         // RecyclerViewの設定
         binding.rvRepositoryList.adapter = adapter
         binding.rvRepositoryList.layoutManager =
             LinearLayoutManager(this.context).apply {
                 orientation = LinearLayoutManager.VERTICAL
             }
-//        binding.rvRepositoryList.addItemDecoration(
-//            DividerItemDecoration(
-//                this.context,
-//                DividerItemDecoration.VERTICAL,
-//            ),
-//        )
 
         // RecyclerViewの最後のアイテムが完全に表示されたとき追加で読み込み
         binding.rvRepositoryList.addOnScrollListener(
@@ -113,18 +119,6 @@ class RepositoryListFragment : Fragment() {
                 }
             },
         )
-
-        // 検索ボタンをクリックしたときの処理
-        binding.btnSearch.setOnClickListener {
-            hideSoftKeyboard()
-            if (binding.txtSearchWord.text.isNullOrBlank()) {
-                Toast.makeText(context, "キーワードを入力してください", Toast.LENGTH_SHORT).show()
-            } else {
-                _searchViewModel.searchWord = binding.txtSearchWord.text.toString()
-                _searchViewModel.clearRepositoryList()
-                _searchViewModel.addRepositoryList()
-            }
-        }
     }
 
     override fun onDestroyView() {

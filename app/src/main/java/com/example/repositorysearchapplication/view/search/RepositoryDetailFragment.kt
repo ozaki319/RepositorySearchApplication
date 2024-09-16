@@ -43,6 +43,7 @@ class RepositoryDetailFragment : Fragment() {
                     view: WebView?,
                     request: WebResourceRequest?,
                 ): Boolean {
+                    // リンクをクリックしたとき（ロードするとき）に外部ブラウザを開くかの確認ダイアログ
                     val dialog = OpenBrowserDialogFragment()
                     dialog.show(childFragmentManager, "dialog")
                     childFragmentManager.setFragmentResultListener(

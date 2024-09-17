@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">RepositorySearchApplication</string>
 
+    <string name="main_app_name">GitHubリポジトリ検索アプリ</string>
     <string name="main_btn_search">リポジトリ\n検索</string>
+    <string name="main_btn_favorite">お気に入り\nリポジトリ</string>
 
     <string name="repository_list_search_hint">キーワードを入力</string>
     <string name="repository_list_btn_search">検索</string>
 
     <string name="repository_detail_favorite">お気に入り登録</string>
+
+    <string name="favorite_list_no_repository">保存したリポジトリはありません</string>
+
+    <string name="favorite_detail_btn_delete">お気に入りから削除</string>
 </resources>

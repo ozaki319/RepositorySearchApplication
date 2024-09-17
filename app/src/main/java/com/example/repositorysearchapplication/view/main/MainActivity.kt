@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.ActivityMainBinding
+import com.example.repositorysearchapplication.view.favorite.FavoriteActivity
 import com.example.repositorysearchapplication.view.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
@@ -24,8 +25,15 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // リポジトリ検索ボタンをクリックしたときの処理
         binding.btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        // お気に入りリポジトリボタンをクリックしたときの処理
+        binding.btnFavorite.setOnClickListener {
+            val intent = Intent(this, FavoriteActivity::class.java)
             startActivity(intent)
         }
     }

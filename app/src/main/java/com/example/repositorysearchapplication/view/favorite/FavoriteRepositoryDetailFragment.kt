@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentFavoriteRepositoryDetailBinding
+import com.example.repositorysearchapplication.view.dialog.DeleteFavoriteDialogFragment
 import com.example.repositorysearchapplication.view.dialog.OpenBrowserDialogFragment
 import com.example.repositorysearchapplication.viewmodel.FavoriteViewModel
 
@@ -71,10 +72,20 @@ class FavoriteRepositoryDetailFragment : Fragment() {
         binding.wvRepositoryDetail.settings.javaScriptEnabled = true
         binding.wvRepositoryDetail.loadUrl(_favoriteViewModel.selectRepository.htmlUrl)
 
-        // お気に入り登録ボタンをクリックしたときの処理
+        // お気に入りから削除ボタンをクリックしたときの処理
         binding.btnDelete.setOnClickListener {
-            _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
-            findNavController().popBackStack()
+            // 確認ダイアログを表示
+            val dialog = DeleteFavoriteDialogFragment()
+            dialog.show(childFragmentManager, "dialog")
+            childFragmentManager.setFragmentResultListener(
+                "request_key",
+                viewLifecycleOwner,
+            ) { key, bundle ->
+                if (bundle.getBoolean("click")) {
+                    _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
+                    findNavController().popBackStack()
+                }
+            }
         }
     }
 

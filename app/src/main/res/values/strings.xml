@@ -10,10 +10,12 @@
 
     <string name="repository_detail_favorite">お気に入り登録</string>
     <string name="save_repository_message">保存するフォルダを選択してください</string>
+    <string name="new_folder_create_message">お気に入りフォルダを新規作成します</string>
 
     <string name="txt_ok">OK</string>
     <string name="txt_cancel">キャンセル</string>
     <string name="txt_new_folder">新規作成</string>
+    <string name="txt_input_folder_name">フォルダ名を入力</string>
 
     <string name="favorite_list_no_repository">保存したリポジトリはありません</string>
     <string name="favorite_list_select_folder">選択中のフォルダ</string>

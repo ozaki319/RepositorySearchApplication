@@ -10,11 +10,6 @@ class FavoriteRepository(
 ) {
     private val _db: AppDatabase = AppDatabase.getDatabase(application)
 
-//    fun getFavoriteRepository(): LiveData<List<RepositoryEntity>> {
-//        val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
-//        return favoriteRepositoryDAO.getALl()
-//    }
-
     suspend fun getFavoriteFolderRepository(folderName: String): List<RepositoryEntity> {
         val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
         return favoriteRepositoryDAO.getFolderData(folderName)
@@ -29,11 +24,6 @@ class FavoriteRepository(
         val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
         return favoriteRepositoryDAO.delete(repositoryData)
     }
-
-//    fun getFavoriteFolder(): LiveData<List<FavoriteFolderEntity>> {
-//        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
-//        return favoriteFolderDAO.getAll()
-//    }
 
     suspend fun getFavoriteFolderName(): List<String> {
         val favoriteFolderDAO = _db.createFavoriteFolderDAO()

@@ -109,8 +109,7 @@ class FavoriteRepositoryListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     _favoriteViewModel.eventGetFavoriteFolderList.collect {
-//                        val favoriteFolderArray = _favoriteViewModel.favoriteFolderList.toTypedArray()
-                        val favoriteFolderArray = arrayOf("folder1", "folder2", "folder3")
+                        val favoriteFolderArray = _favoriteViewModel.favoriteFolderList.toTypedArray()
                         // Spinnerの設定
                         val adapter =
                             ArrayAdapter(

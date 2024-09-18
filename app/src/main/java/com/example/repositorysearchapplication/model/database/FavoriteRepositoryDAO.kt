@@ -8,9 +8,6 @@ import androidx.room.Query
 
 @Dao
 interface FavoriteRepositoryDAO {
-//    @Query("SELECT * FROM favorite_repository ORDER BY fullName ASC")
-//    fun getALl(): LiveData<List<RepositoryEntity>>
-
     @Query("SELECT * FROM favorite_repository WHERE saveFolder = :folderName ORDER BY fullName ASC")
     suspend fun getFolderData(folderName: String): List<RepositoryEntity>
 

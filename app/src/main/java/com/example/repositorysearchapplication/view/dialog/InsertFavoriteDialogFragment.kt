@@ -12,7 +12,6 @@ import com.example.repositorysearchapplication.databinding.InsertFavoriteDialogB
 class InsertFavoriteDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = Dialog(requireContext())
-
         val binding = InsertFavoriteDialogBinding.inflate(requireActivity().layoutInflater)
         dialog.setContentView(binding.root)
 
@@ -33,7 +32,7 @@ class InsertFavoriteDialogFragment : DialogFragment() {
             if (binding.spnFolder.selectedItem == null) {
                 Toast.makeText(context, "フォルダが未選択です", Toast.LENGTH_SHORT).show()
             } else {
-                val bundle = bundleOf("save_folder" to binding.spnFolder.selectedItem.toString())
+                val bundle = bundleOf("click" to true, "save_folder" to binding.spnFolder.selectedItem.toString())
                 setFragmentResult("request_key", bundle)
                 dismiss()
             }
@@ -46,7 +45,9 @@ class InsertFavoriteDialogFragment : DialogFragment() {
 
         // 新規作成をクリックしたときの処理
         binding.txtNewFolder.setOnClickListener {
-            Toast.makeText(context, "test", Toast.LENGTH_SHORT).show()
+            val bundle = bundleOf("click" to false)
+            setFragmentResult("request_key", bundle)
+            dismiss()
         }
 
         return dialog

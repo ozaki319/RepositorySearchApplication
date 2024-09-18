@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.repositorysearchapplication.R
@@ -15,6 +20,7 @@ import com.example.repositorysearchapplication.databinding.FragmentFavoriteRepos
 import com.example.repositorysearchapplication.model.adapter.RepositoryListAdapter
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
 import com.example.repositorysearchapplication.viewmodel.FavoriteViewModel
+import kotlinx.coroutines.launch
 
 class FavoriteRepositoryListFragment : Fragment() {
     private var _binding: FragmentFavoriteRepositoryListBinding? = null
@@ -23,6 +29,12 @@ class FavoriteRepositoryListFragment : Fragment() {
     private val adapter = RepositoryListAdapter()
 
     // LiveDataのオブザーバクラス
+    private inner class SelectFolderObserver : Observer<String> {
+        override fun onChanged(value: String) {
+            _favoriteViewModel.getFavoriteFolderRepository(value)
+        }
+    }
+
     private inner class FavoriteRepositoryListObserver : Observer<List<RepositoryEntity>> {
         override fun onChanged(value: List<RepositoryEntity>) {
             adapter.submitList(value)
@@ -46,10 +58,34 @@ class FavoriteRepositoryListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // LiveDataにオブザーバを登録
+        _favoriteViewModel.selectFolder.observe(
+            viewLifecycleOwner,
+            SelectFolderObserver(),
+        )
+
         _favoriteViewModel.favoriteRepositoryList.observe(
             viewLifecycleOwner,
             FavoriteRepositoryListObserver(),
         )
+
+        // お気に入りフォルダの取得
+        _favoriteViewModel.getFavoriteFolderList()
+
+        // Spinnerのアイテムが選択されたとき
+        binding.spnFolder.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    val item = parent?.selectedItem.toString()
+                    _favoriteViewModel.folderSelect(item)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
 
         // RecyclerViewの設定
         binding.rvFavoriteRepositoryList.adapter = adapter
@@ -67,6 +103,26 @@ class FavoriteRepositoryListFragment : Fragment() {
                 }
             },
         )
+
+        // ViewModelのFlowの購読
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    _favoriteViewModel.eventGetFavoriteFolderList.collect {
+//                        val favoriteFolderArray = _favoriteViewModel.favoriteFolderList.toTypedArray()
+                        val favoriteFolderArray = arrayOf("folder1", "folder2", "folder3")
+                        // Spinnerの設定
+                        val adapter =
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_item,
+                                favoriteFolderArray,
+                            )
+                        binding.spnFolder.adapter = adapter
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

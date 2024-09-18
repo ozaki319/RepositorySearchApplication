@@ -18,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentRepositoryDetailBinding
+import com.example.repositorysearchapplication.view.dialog.InsertFavoriteDialogFragment
 import com.example.repositorysearchapplication.view.dialog.OpenBrowserDialogFragment
 import com.example.repositorysearchapplication.viewmodel.SearchViewModel
 import kotlinx.coroutines.launch
@@ -62,7 +63,7 @@ class RepositoryDetailFragment : Fragment() {
                     childFragmentManager.setFragmentResultListener(
                         "request_key",
                         viewLifecycleOwner,
-                    ) { key, bundle ->
+                    ) { _, bundle ->
                         if (bundle.getBoolean("click")) {
                             val url = request?.url
                             val intent = Intent(Intent.ACTION_VIEW, url)
@@ -77,7 +78,8 @@ class RepositoryDetailFragment : Fragment() {
 
         // お気に入り登録ボタンをクリックしたときの処理
         binding.btnFavorite.setOnClickListener {
-            _searchViewModel.insertFavoriteRepository(_searchViewModel.selectRepository)
+            _searchViewModel.getFavoriteFolderList()
+            // _searchViewModel.insertFavoriteRepository(_searchViewModel.selectRepository)
         }
 
         // ViewModelのFlowの購読
@@ -88,6 +90,26 @@ class RepositoryDetailFragment : Fragment() {
                         Toast
                             .makeText(context, "お気に入りに登録しました", Toast.LENGTH_SHORT)
                             .show()
+                    }
+                }
+                launch {
+                    _searchViewModel.eventGetFavoriteFolderList.collect {
+//                        val favoriteFolderArray = _searchViewModel.favoriteFolderList.toTypedArray()
+                        val favoriteFolderArray = arrayOf("folder1", "folder2", "folder3")
+                        val dialog = InsertFavoriteDialogFragment()
+                        val bundleSend =
+                            Bundle().apply {
+                                putStringArray("favorite_folder_list", favoriteFolderArray)
+                            }
+                        dialog.arguments = bundleSend
+                        dialog.show(childFragmentManager, "dialog")
+                        childFragmentManager.setFragmentResultListener(
+                            "request_key",
+                            viewLifecycleOwner,
+                        ) { _, bundleReceive ->
+                            val saveFolder = bundleReceive.getString("save_folder")!!
+                            _searchViewModel.insertFavoriteRepository(_searchViewModel.selectRepository, saveFolder)
+                        }
                     }
                 }
             }

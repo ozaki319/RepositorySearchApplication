@@ -9,8 +9,14 @@
     <string name="repository_list_btn_search">検索</string>
 
     <string name="repository_detail_favorite">お気に入り登録</string>
+    <string name="save_repository_message">保存するフォルダを選択してください</string>
+
+    <string name="txt_ok">OK</string>
+    <string name="txt_cancel">キャンセル</string>
+    <string name="txt_new_folder">新規作成</string>
 
     <string name="favorite_list_no_repository">保存したリポジトリはありません</string>
+    <string name="favorite_list_select_folder">選択中のフォルダ</string>
 
     <string name="favorite_detail_btn_delete">お気に入りから削除</string>
 </resources>

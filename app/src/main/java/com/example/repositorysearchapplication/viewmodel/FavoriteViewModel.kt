@@ -20,6 +20,8 @@ class FavoriteViewModel(
     var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
     var favoriteFolderList: List<String> = listOf()
     val selectFolder = MutableLiveData<String>()
+    var focusFolderName = ""
+    var indexSelectFolder = 0
 
     // ViewModelのイベントを通知するFlow
     private val channelGetFavoriteFolderList = Channel<Int>(capacity = Channel.UNLIMITED)
@@ -35,6 +37,7 @@ class FavoriteViewModel(
     fun getFavoriteFolderList() {
         viewModelScope.launch {
             favoriteFolderList = _favoriteRepository.getFavoriteFolderName()
+            indexSelectFolder = favoriteFolderList.indexOf(focusFolderName)
             channelGetFavoriteFolderList.send(1)
         }
     }
@@ -58,6 +61,7 @@ class FavoriteViewModel(
             val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
             if (check) {
                 _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+                focusFolderName = folderName
                 channelUpdateFavoriteFolder.send(1)
             } else {
                 channelNgNewFolder.send(1)
@@ -75,6 +79,7 @@ class FavoriteViewModel(
             if (check) {
                 _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
                 updateFavoriteRepository(newFolderName, currentFolderName)
+                focusFolderName = newFolderName
                 channelUpdateFavoriteFolder.send(1)
             } else {
                 channelNgRenameFolder.send(1)
@@ -97,6 +102,7 @@ class FavoriteViewModel(
         viewModelScope.launch {
             _favoriteRepository.deleteFavoriteFolder(FavoriteFolderEntity(folderName))
             _favoriteRepository.deleteAllFavoriteRepository(folderName)
+            focusFolderName = ""
             channelUpdateFavoriteFolder.send(1)
         }
     }

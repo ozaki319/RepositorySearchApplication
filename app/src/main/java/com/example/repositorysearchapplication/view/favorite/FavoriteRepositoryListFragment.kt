@@ -148,6 +148,7 @@ class FavoriteRepositoryListFragment : Fragment() {
                                 favoriteFolderArray,
                             )
                         binding.spnFolder.adapter = adapter
+                        binding.spnFolder.setSelection(_favoriteViewModel.indexSelectFolder)
                     }
                 }
                 launch {
@@ -179,6 +180,11 @@ class FavoriteRepositoryListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        _favoriteViewModel.focusFolderName = _favoriteViewModel.selectFolder.value.toString()
     }
 
     override fun onDestroyView() {

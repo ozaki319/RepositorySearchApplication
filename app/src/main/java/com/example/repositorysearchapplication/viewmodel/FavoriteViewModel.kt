@@ -39,6 +39,10 @@ class FavoriteViewModel(
             favoriteFolderList = _favoriteRepository.getFavoriteFolderName()
             indexSelectFolder = favoriteFolderList.indexOf(focusFolderName)
             channelGetFavoriteFolderList.send(1)
+            if (favoriteFolderList.isEmpty())
+                {
+                    selectFolder.value = ""
+                }
         }
     }
 

@@ -33,7 +33,7 @@ class FavoriteRepository(
         return favoriteRepositoryDAO.delete(repositoryData)
     }
 
-    suspend fun deleteAllFavoriteRepository(folderName: String)  {
+    suspend fun deleteAllFavoriteRepository(folderName: String) {
         val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
         return favoriteRepositoryDAO.deleteAll(folderName)
     }
@@ -41,6 +41,11 @@ class FavoriteRepository(
     suspend fun getFavoriteFolderName(): List<String> {
         val favoriteFolderDAO = _db.createFavoriteFolderDAO()
         return favoriteFolderDAO.get()
+    }
+
+    suspend fun countFavoriteFolder(folderName: String): Int {
+        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
+        return favoriteFolderDAO.count(folderName)
     }
 
     suspend fun updateFavoriteFolderName(

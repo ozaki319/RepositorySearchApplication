@@ -74,15 +74,26 @@ class RepositoryDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
+                    _searchViewModel.eventGetFavoriteFolderList.collect {
+                        showInsertFavoriteDialog()
+                    }
+                }
+                launch {
+                    _searchViewModel.eventNgNewFolder.collect {
+                        Toast
+                            .makeText(
+                                context,
+                                "そのフォルダ名は既に使用されています",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        showNewFolderDialog()
+                    }
+                }
+                launch {
                     _searchViewModel.eventInsertFavoriteRepository.collect {
                         Toast
                             .makeText(context, "お気に入りに登録しました", Toast.LENGTH_SHORT)
                             .show()
-                    }
-                }
-                launch {
-                    _searchViewModel.eventGetFavoriteFolderList.collect {
-                        showInsertFavoriteDialog()
                     }
                 }
             }
@@ -95,7 +106,7 @@ class RepositoryDetailFragment : Fragment() {
     }
 
     // 外部ブラウザ遷移確認ダイアログ
-    private fun showOpenBrowserDialog(request: WebResourceRequest?)  {
+    private fun showOpenBrowserDialog(request: WebResourceRequest?) {
         val dialog = OpenBrowserDialogFragment()
         dialog.show(childFragmentManager, "dialog")
         childFragmentManager.setFragmentResultListener(
@@ -146,7 +157,6 @@ class RepositoryDetailFragment : Fragment() {
         ) { _, bundle ->
             val folderName = bundle.getString("folder_name")!!
             _searchViewModel.insertNewFavoriteFolder(folderName)
-            _searchViewModel.insertFavoriteRepository(_searchViewModel.selectRepository, folderName)
         }
     }
 }

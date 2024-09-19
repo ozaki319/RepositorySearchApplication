@@ -26,11 +26,13 @@ class SearchViewModel(
     var favoriteFolderList: List<String> = listOf()
 
     // ViewModelのイベントを通知するFlow
-    private val channelInsertFavoriteRepository =
-        Channel<RepositoryEntity>(capacity = Channel.UNLIMITED)
-    var eventInsertFavoriteRepository = channelInsertFavoriteRepository.receiveAsFlow()
-    private val channelGetFavoriteFolderList = Channel<List<String>>(capacity = Channel.UNLIMITED)
+    private val channelGetFavoriteFolderList = Channel<Int>(capacity = Channel.UNLIMITED)
     var eventGetFavoriteFolderList = channelGetFavoriteFolderList.receiveAsFlow()
+    private val channelNgNewFolder = Channel<Int>(capacity = Channel.UNLIMITED)
+    var eventNgNewFolder = channelNgNewFolder.receiveAsFlow()
+    private val channelInsertFavoriteRepository =
+        Channel<Int>(capacity = Channel.UNLIMITED)
+    var eventInsertFavoriteRepository = channelInsertFavoriteRepository.receiveAsFlow()
 
     // 検索結果をクリアするメソッド
     fun clearRepositoryList() {
@@ -57,14 +59,20 @@ class SearchViewModel(
     fun getFavoriteFolderList() {
         viewModelScope.launch {
             favoriteFolderList = _favoriteRepository.getFavoriteFolderName()
-            channelGetFavoriteFolderList.send(favoriteFolderList)
+            channelGetFavoriteFolderList.send(1)
         }
     }
 
     // お気に入りフォルダを新規作成するメソッド
-    fun insertNewFavoriteFolder(folderName: String)  {
+    fun insertNewFavoriteFolder(folderName: String) {
         viewModelScope.launch {
-            _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
+            if (check) {
+                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+                insertFavoriteRepository(selectRepository, folderName)
+            } else {
+                channelNgNewFolder.send(1)
+            }
         }
     }
 
@@ -86,7 +94,7 @@ class SearchViewModel(
                     saveFolder,
                 )
             _favoriteRepository.insertFavoriteRepository(saveData)
-            channelInsertFavoriteRepository.send(saveData)
+            channelInsertFavoriteRepository.send(1)
         }
     }
 }

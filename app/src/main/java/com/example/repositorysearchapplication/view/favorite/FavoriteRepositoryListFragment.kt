@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -154,6 +155,28 @@ class FavoriteRepositoryListFragment : Fragment() {
                         _favoriteViewModel.getFavoriteFolderList()
                     }
                 }
+                launch {
+                    _favoriteViewModel.eventNgNewFolder.collect {
+                        Toast
+                            .makeText(
+                                context,
+                                "そのフォルダ名は既に使用されています",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        showNewFolderDialog()
+                    }
+                }
+                launch {
+                    _favoriteViewModel.eventNgRenameFolder.collect {
+                        Toast
+                            .makeText(
+                                context,
+                                "そのフォルダ名は既に使用されています",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        showRenameFolderDialog()
+                    }
+                }
             }
         }
     }
@@ -191,10 +214,6 @@ class FavoriteRepositoryListFragment : Fragment() {
         ) { _, bundleReceive ->
             val newFolderName = bundleReceive.getString("new_folder_name")!!
             _favoriteViewModel.updateFavoriteFolderName(
-                newFolderName,
-                _favoriteViewModel.selectFolder.value!!,
-            )
-            _favoriteViewModel.updateFavoriteRepository(
                 newFolderName,
                 _favoriteViewModel.selectFolder.value!!,
             )

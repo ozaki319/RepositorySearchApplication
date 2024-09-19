@@ -26,6 +26,10 @@ class FavoriteViewModel(
     var eventGetFavoriteFolderList = channelGetFavoriteFolderList.receiveAsFlow()
     private val channelUpdateFavoriteFolder = Channel<Int>(capacity = Channel.UNLIMITED)
     var eventUpdateFavoriteFolder = channelUpdateFavoriteFolder.receiveAsFlow()
+    private val channelNgNewFolder = Channel<Int>(capacity = Channel.UNLIMITED)
+    var eventNgNewFolder = channelNgNewFolder.receiveAsFlow()
+    private val channelNgRenameFolder = Channel<Int>(capacity = Channel.UNLIMITED)
+    var eventNgRenameFolder = channelNgRenameFolder.receiveAsFlow()
 
     // お気に入りフォルダリストを取得するメソッド
     fun getFavoriteFolderList() {
@@ -51,8 +55,13 @@ class FavoriteViewModel(
     // お気に入りフォルダを新規作成するメソッド
     fun insertNewFavoriteFolder(folderName: String) {
         viewModelScope.launch {
-            _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
-            channelUpdateFavoriteFolder.send(1)
+            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
+            if (check) {
+                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+                channelUpdateFavoriteFolder.send(1)
+            } else {
+                channelNgNewFolder.send(1)
+            }
         }
     }
 
@@ -62,13 +71,19 @@ class FavoriteViewModel(
         currentFolderName: String,
     ) {
         viewModelScope.launch {
-            _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
-            channelUpdateFavoriteFolder.send(1)
+            val check = _favoriteRepository.countFavoriteFolder(newFolderName) < 1
+            if (check) {
+                _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
+                updateFavoriteRepository(newFolderName, currentFolderName)
+                channelUpdateFavoriteFolder.send(1)
+            } else {
+                channelNgRenameFolder.send(1)
+            }
         }
     }
 
     // お気に入りリポジトリの保存フォルダ名を変更するメソッド
-    fun updateFavoriteRepository(
+    private fun updateFavoriteRepository(
         newFolderName: String,
         currentFolderName: String,
     ) {

@@ -32,7 +32,11 @@ class InsertFavoriteDialogFragment : DialogFragment() {
             if (binding.spnFolder.selectedItem == null) {
                 Toast.makeText(context, "フォルダが未選択です", Toast.LENGTH_SHORT).show()
             } else {
-                val bundle = bundleOf("click" to true, "save_folder" to binding.spnFolder.selectedItem.toString())
+                val bundle =
+                    bundleOf(
+                        "click" to true,
+                        "save_folder" to binding.spnFolder.selectedItem.toString(),
+                    )
                 setFragmentResult("request_key", bundle)
                 dismiss()
             }

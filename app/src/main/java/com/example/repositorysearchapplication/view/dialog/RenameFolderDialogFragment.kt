@@ -20,11 +20,11 @@ class RenameFolderDialogFragment : DialogFragment() {
 
         // OKをクリックしたときの処理
         binding.txtOK.setOnClickListener {
-            if (binding.editNewFolderName.text.isNullOrBlank())
-                {
-                    Toast.makeText(context, "フォルダ名が未入力です", Toast.LENGTH_SHORT).show()
-                } else {
-                val bundle = bundleOf("new_folder_name" to binding.editNewFolderName.text.toString())
+            if (binding.editNewFolderName.text.isNullOrBlank()) {
+                Toast.makeText(context, "フォルダ名が未入力です", Toast.LENGTH_SHORT).show()
+            } else {
+                val bundle =
+                    bundleOf("new_folder_name" to binding.editNewFolderName.text.toString())
                 setFragmentResult("request_key", bundle)
                 dismiss()
             }

@@ -84,7 +84,7 @@ class FavoriteRepositoryDetailFragment : Fragment() {
     }
 
     // お気に入り削除確認ダイアログ
-    private fun showDeleteFavoriteDialog()  {
+    private fun showDeleteFavoriteDialog() {
         val dialog = DeleteFavoriteDialogFragment()
         dialog.show(childFragmentManager, "dialog")
         childFragmentManager.setFragmentResultListener(

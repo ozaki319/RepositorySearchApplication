@@ -101,7 +101,8 @@ class RepositoryListFragment : Fragment() {
                 ) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    val layoutManager = binding.rvRepositoryList.layoutManager as LinearLayoutManager
+                    val layoutManager =
+                        binding.rvRepositoryList.layoutManager as LinearLayoutManager
                     val totalItemCount = layoutManager.itemCount
                     val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
 

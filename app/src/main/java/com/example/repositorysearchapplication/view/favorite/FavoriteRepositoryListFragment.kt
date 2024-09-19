@@ -123,19 +123,21 @@ class FavoriteRepositoryListFragment : Fragment() {
                     }
 
                     "rename_folder" -> {
-                        if (_favoriteViewModel.selectFolder.value.isNullOrBlank())
-                            {
-                                Toast.makeText(context, "フォルダが存在しません", Toast.LENGTH_SHORT).show()
-                            } else {
+                        if (_favoriteViewModel.selectFolder.value.isNullOrBlank()) {
+                            Toast
+                                .makeText(context, "フォルダが存在しません", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
                             showRenameFolderDialog()
                         }
                     }
 
                     "delete_folder" -> {
-                        if (_favoriteViewModel.selectFolder.value.isNullOrBlank())
-                            {
-                                Toast.makeText(context, "フォルダが存在しません", Toast.LENGTH_SHORT).show()
-                            } else {
+                        if (_favoriteViewModel.selectFolder.value.isNullOrBlank()) {
+                            Toast
+                                .makeText(context, "フォルダが存在しません", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
                             showDeleteFolderDialog()
                         }
                     }

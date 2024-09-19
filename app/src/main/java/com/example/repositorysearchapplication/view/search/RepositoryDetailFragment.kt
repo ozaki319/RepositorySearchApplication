@@ -58,19 +58,7 @@ class RepositoryDetailFragment : Fragment() {
                     view: WebView?,
                     request: WebResourceRequest?,
                 ): Boolean {
-                    // リンクをクリックしたとき（ロードするとき）に外部ブラウザを開くかの確認ダイアログ
-                    val dialog = OpenBrowserDialogFragment()
-                    dialog.show(childFragmentManager, "dialog")
-                    childFragmentManager.setFragmentResultListener(
-                        "request_key",
-                        viewLifecycleOwner,
-                    ) { _, bundle ->
-                        if (bundle.getBoolean("click")) {
-                            val url = request?.url
-                            val intent = Intent(Intent.ACTION_VIEW, url)
-                            startActivity(intent)
-                        }
-                    }
+                    showOpenBrowserDialog(request)
                     return true
                 }
             }
@@ -106,6 +94,23 @@ class RepositoryDetailFragment : Fragment() {
         _binding = null
     }
 
+    // 外部ブラウザ遷移確認ダイアログ
+    private fun showOpenBrowserDialog(request: WebResourceRequest?)  {
+        val dialog = OpenBrowserDialogFragment()
+        dialog.show(childFragmentManager, "dialog")
+        childFragmentManager.setFragmentResultListener(
+            "request_key",
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            if (bundle.getBoolean("click")) {
+                val url = request?.url
+                val intent = Intent(Intent.ACTION_VIEW, url)
+                startActivity(intent)
+            }
+        }
+    }
+
+    // お気に入り登録ダイアログ
     private fun showInsertFavoriteDialog() {
         val favoriteFolderArray = _searchViewModel.favoriteFolderList.toTypedArray()
         val dialog = InsertFavoriteDialogFragment()
@@ -131,6 +136,7 @@ class RepositoryDetailFragment : Fragment() {
         }
     }
 
+    // フォルダ新規作成ダイアログ
     private fun showNewFolderDialog() {
         val dialog = NewFolderDialogFragment()
         dialog.show(childFragmentManager, "dialog")

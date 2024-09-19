@@ -74,23 +74,27 @@ class FavoriteRepositoryDetailFragment : Fragment() {
 
         // お気に入りから削除ボタンをクリックしたときの処理
         binding.btnDelete.setOnClickListener {
-            // 確認ダイアログを表示
-            val dialog = DeleteFavoriteDialogFragment()
-            dialog.show(childFragmentManager, "dialog")
-            childFragmentManager.setFragmentResultListener(
-                "request_key",
-                viewLifecycleOwner,
-            ) { key, bundle ->
-                if (bundle.getBoolean("click")) {
-                    _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
-                    findNavController().popBackStack()
-                }
-            }
+            showDeleteFavoriteDialog()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // お気に入り削除確認ダイアログ
+    private fun showDeleteFavoriteDialog()  {
+        val dialog = DeleteFavoriteDialogFragment()
+        dialog.show(childFragmentManager, "dialog")
+        childFragmentManager.setFragmentResultListener(
+            "request_key",
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            if (bundle.getBoolean("click")) {
+                _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
+                findNavController().popBackStack()
+            }
+        }
     }
 }

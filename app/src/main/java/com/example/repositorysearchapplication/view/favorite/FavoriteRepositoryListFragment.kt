@@ -19,6 +19,8 @@ import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentFavoriteRepositoryListBinding
 import com.example.repositorysearchapplication.model.adapter.RepositoryListAdapter
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
+import com.example.repositorysearchapplication.view.dialog.MenuDialogFragment
+import com.example.repositorysearchapplication.view.dialog.NewFolderDialogFragment
 import com.example.repositorysearchapplication.viewmodel.FavoriteViewModel
 import kotlinx.coroutines.launch
 
@@ -104,6 +106,24 @@ class FavoriteRepositoryListFragment : Fragment() {
             },
         )
 
+        // メニューボタンをクリックしたときの処理
+        binding.btnMenu.setOnClickListener {
+            val dialog = MenuDialogFragment()
+            dialog.show(childFragmentManager, "dialog")
+            childFragmentManager.setFragmentResultListener(
+                "request_key",
+                viewLifecycleOwner,
+            ) { _, bundle ->
+                when (bundle.getString("click")) {
+                    "new_folder" -> {
+                        showNewFolderDialog()
+                    }
+                    "folder_rename" -> {}
+                    "delete_folder" -> {}
+                }
+            }
+        }
+
         // ViewModelのFlowの購読
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -127,5 +147,18 @@ class FavoriteRepositoryListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // フォルダ新規作成ダイアログ
+    private fun showNewFolderDialog()  {
+        val dialog = NewFolderDialogFragment()
+        dialog.show(childFragmentManager, "dialog")
+        childFragmentManager.setFragmentResultListener(
+            "request_key",
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            val folderName = bundle.getString("folder_name")!!
+            _favoriteViewModel.insertNewFavoriteFolder(folderName)
+        }
     }
 }

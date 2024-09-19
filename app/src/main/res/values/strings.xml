@@ -14,7 +14,10 @@
 
     <string name="txt_ok">OK</string>
     <string name="txt_cancel">キャンセル</string>
+    <string name="txt_folder_control">フォルダ管理</string>
     <string name="txt_new_folder">新規作成</string>
+    <string name="txt_folder_rename">フォルダ名変更</string>
+    <string name="txt_delete_folder">フォルダ削除</string>
     <string name="txt_input_folder_name">フォルダ名を入力</string>
 
     <string name="favorite_list_no_repository">保存したリポジトリはありません</string>

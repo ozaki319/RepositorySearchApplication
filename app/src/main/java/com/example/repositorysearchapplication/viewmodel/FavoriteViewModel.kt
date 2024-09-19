@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.repositorysearchapplication.model.database.FavoriteFolderEntity
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
 import com.example.repositorysearchapplication.model.repository.FavoriteRepository
 import kotlinx.coroutines.channels.Channel
@@ -42,6 +43,13 @@ class FavoriteViewModel(
         viewModelScope.launch {
             favoriteRepositoryList.value =
                 _favoriteRepository.getFavoriteFolderRepository(folderName)
+        }
+    }
+
+    // お気に入りフォルダを新規作成するメソッド
+    fun insertNewFavoriteFolder(folderName: String) {
+        viewModelScope.launch {
+            _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
         }
     }
 

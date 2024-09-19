@@ -22,14 +22,16 @@ class FavoriteViewModel(
     val selectFolder = MutableLiveData<String>()
 
     // ViewModelのイベントを通知するFlow
-    private val channelGetFavoriteFolderList = Channel<List<String>>(capacity = Channel.UNLIMITED)
+    private val channelGetFavoriteFolderList = Channel<Int>(capacity = Channel.UNLIMITED)
     var eventGetFavoriteFolderList = channelGetFavoriteFolderList.receiveAsFlow()
+    private val channelUpdateFavoriteFolder = Channel<Int>(capacity = Channel.UNLIMITED)
+    var eventUpdateFavoriteFolder = channelUpdateFavoriteFolder.receiveAsFlow()
 
     // お気に入りフォルダリストを取得するメソッド
     fun getFavoriteFolderList() {
         viewModelScope.launch {
             favoriteFolderList = _favoriteRepository.getFavoriteFolderName()
-            channelGetFavoriteFolderList.send(favoriteFolderList)
+            channelGetFavoriteFolderList.send(1)
         }
     }
 
@@ -42,7 +44,7 @@ class FavoriteViewModel(
     fun getFavoriteFolderRepository(folderName: String) {
         viewModelScope.launch {
             favoriteRepositoryList.value =
-                _favoriteRepository.getFavoriteFolderRepository(folderName)
+                _favoriteRepository.getFavoriteRepository(folderName)
         }
     }
 
@@ -50,10 +52,41 @@ class FavoriteViewModel(
     fun insertNewFavoriteFolder(folderName: String) {
         viewModelScope.launch {
             _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+            channelUpdateFavoriteFolder.send(1)
         }
     }
 
-    // お気に入りから削除するメソッド
+    // お気に入りフォルダの名前を変更するメソッド
+    fun updateFavoriteFolderName(
+        newFolderName: String,
+        currentFolderName: String,
+    ) {
+        viewModelScope.launch {
+            _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
+            channelUpdateFavoriteFolder.send(1)
+        }
+    }
+
+    // お気に入りリポジトリの保存フォルダ名を変更するメソッド
+    fun updateFavoriteRepository(
+        newFolderName: String,
+        currentFolderName: String,
+    ) {
+        viewModelScope.launch {
+            _favoriteRepository.updateFavoriteRepository(newFolderName, currentFolderName)
+        }
+    }
+
+    // お気に入りフォルダを削除するメソッド
+    fun deleteFavoriteFolder(folderName: String) {
+        viewModelScope.launch {
+            _favoriteRepository.deleteFavoriteFolder(FavoriteFolderEntity(folderName))
+            _favoriteRepository.deleteAllFavoriteRepository(folderName)
+            channelUpdateFavoriteFolder.send(1)
+        }
+    }
+
+    // お気に入りリポジトリをフォルダから削除するメソッド
     fun deleteFavoriteRepository(data: RepositoryEntity) {
         viewModelScope.launch {
             _favoriteRepository.deleteFavoriteRepository(data)

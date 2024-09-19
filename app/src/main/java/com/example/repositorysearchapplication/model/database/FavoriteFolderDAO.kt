@@ -9,7 +9,13 @@ import androidx.room.Query
 @Dao
 interface FavoriteFolderDAO {
     @Query("SELECT folderName FROM favorite_folder ORDER BY folderName ASC")
-    suspend fun getFolderName(): List<String>
+    suspend fun get(): List<String>
+
+    @Query("UPDATE favorite_folder SET folderName = :newFolderName WHERE folderName = :currentFolderName")
+    suspend fun update(
+        newFolderName: String,
+        currentFolderName: String,
+    )
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(folderData: FavoriteFolderEntity)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="24dp">
@@ -9,7 +10,7 @@
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txt_new_folder"
+        android:text="@string/txt_delete_folder"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -18,23 +19,29 @@
         android:id="@+id/txtMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_folder_create_message"
-        android:textSize="16sp"
+        android:text="@string/delete_folder_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
-    <EditText
-        android:id="@+id/editNewFolderName"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/txtSelectFolder"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/txt_input_folder_name"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/txt_select_folder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtMessage" />
+
+    <TextView
+        android:id="@+id/txtCurrentFolderName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="CurrentFolderName"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSelectFolder" />
 
     <TextView
         android:id="@+id/txtOK"
@@ -45,7 +52,7 @@
         android:text="@string/txt_ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editNewFolderName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtCurrentFolderName" />
 
     <TextView
         android:id="@+id/txtCancel"
@@ -57,7 +64,5 @@
         android:text="@string/txt_cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txtOK"
-        app:layout_constraintTop_toBottomOf="@+id/editNewFolderName" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/txtCurrentFolderName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,9 +10,17 @@ class FavoriteRepository(
 ) {
     private val _db: AppDatabase = AppDatabase.getDatabase(application)
 
-    suspend fun getFavoriteFolderRepository(folderName: String): List<RepositoryEntity> {
+    suspend fun getFavoriteRepository(folderName: String): List<RepositoryEntity> {
         val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
-        return favoriteRepositoryDAO.getFolderData(folderName)
+        return favoriteRepositoryDAO.get(folderName)
+    }
+
+    suspend fun updateFavoriteRepository(
+        newFolderName: String,
+        currentFolderName: String,
+    ) {
+        val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
+        return favoriteRepositoryDAO.update(newFolderName, currentFolderName)
     }
 
     suspend fun insertFavoriteRepository(repositoryData: RepositoryEntity) {
@@ -25,9 +33,22 @@ class FavoriteRepository(
         return favoriteRepositoryDAO.delete(repositoryData)
     }
 
+    suspend fun deleteAllFavoriteRepository(folderName: String)  {
+        val favoriteRepositoryDAO = _db.createFavoriteRepositoryDAO()
+        return favoriteRepositoryDAO.deleteAll(folderName)
+    }
+
     suspend fun getFavoriteFolderName(): List<String> {
         val favoriteFolderDAO = _db.createFavoriteFolderDAO()
-        return favoriteFolderDAO.getFolderName()
+        return favoriteFolderDAO.get()
+    }
+
+    suspend fun updateFavoriteFolderName(
+        newFolderName: String,
+        currentFolderName: String,
+    ) {
+        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
+        return favoriteFolderDAO.update(newFolderName, currentFolderName)
     }
 
     suspend fun insertFavoriteFolder(folderData: FavoriteFolderEntity) {

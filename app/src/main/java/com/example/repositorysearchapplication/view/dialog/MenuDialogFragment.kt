@@ -22,14 +22,14 @@ class MenuDialogFragment : DialogFragment() {
 
         // フォルダ名変更をクリックしたときの処理
         binding.txtFolderRename.setOnClickListener {
-            val bundle = bundleOf("click" to "folder_rename")
+            val bundle = bundleOf("click" to "rename_folder")
             setFragmentResult("request_key", bundle)
             dismiss()
         }
 
         // フォルダ削除をクリックしたときの処理
         binding.txtFolderDelete.setOnClickListener {
-            val bundle = bundleOf("click" to "folder_delete")
+            val bundle = bundleOf("click" to "delete_folder")
             setFragmentResult("request_key", bundle)
             dismiss()
         }

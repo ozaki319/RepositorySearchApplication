@@ -19,8 +19,10 @@ import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentFavoriteRepositoryListBinding
 import com.example.repositorysearchapplication.model.adapter.RepositoryListAdapter
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
+import com.example.repositorysearchapplication.view.dialog.DeleteFolderDialog
 import com.example.repositorysearchapplication.view.dialog.MenuDialogFragment
 import com.example.repositorysearchapplication.view.dialog.NewFolderDialogFragment
+import com.example.repositorysearchapplication.view.dialog.RenameFolderDialogFragment
 import com.example.repositorysearchapplication.viewmodel.FavoriteViewModel
 import kotlinx.coroutines.launch
 
@@ -118,8 +120,14 @@ class FavoriteRepositoryListFragment : Fragment() {
                     "new_folder" -> {
                         showNewFolderDialog()
                     }
-                    "folder_rename" -> {}
-                    "delete_folder" -> {}
+
+                    "rename_folder" -> {
+                        showRenameFolderDialog()
+                    }
+
+                    "delete_folder" -> {
+                        showDeleteFolderDialog()
+                    }
                 }
             }
         }
@@ -129,7 +137,8 @@ class FavoriteRepositoryListFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     _favoriteViewModel.eventGetFavoriteFolderList.collect {
-                        val favoriteFolderArray = _favoriteViewModel.favoriteFolderList.toTypedArray()
+                        val favoriteFolderArray =
+                            _favoriteViewModel.favoriteFolderList.toTypedArray()
                         // Spinnerの設定
                         val adapter =
                             ArrayAdapter(
@@ -138,6 +147,11 @@ class FavoriteRepositoryListFragment : Fragment() {
                                 favoriteFolderArray,
                             )
                         binding.spnFolder.adapter = adapter
+                    }
+                }
+                launch {
+                    _favoriteViewModel.eventUpdateFavoriteFolder.collect {
+                        _favoriteViewModel.getFavoriteFolderList()
                     }
                 }
             }
@@ -150,7 +164,7 @@ class FavoriteRepositoryListFragment : Fragment() {
     }
 
     // フォルダ新規作成ダイアログ
-    private fun showNewFolderDialog()  {
+    private fun showNewFolderDialog() {
         val dialog = NewFolderDialogFragment()
         dialog.show(childFragmentManager, "dialog")
         childFragmentManager.setFragmentResultListener(
@@ -159,6 +173,50 @@ class FavoriteRepositoryListFragment : Fragment() {
         ) { _, bundle ->
             val folderName = bundle.getString("folder_name")!!
             _favoriteViewModel.insertNewFavoriteFolder(folderName)
+        }
+    }
+
+    // フォルダ名変更ダイアログ
+    private fun showRenameFolderDialog() {
+        val dialog = RenameFolderDialogFragment()
+        val bundleSend =
+            Bundle().apply {
+                putString("current_folder_name", _favoriteViewModel.selectFolder.value)
+            }
+        dialog.arguments = bundleSend
+        dialog.show(childFragmentManager, "dialog")
+        childFragmentManager.setFragmentResultListener(
+            "request_key",
+            viewLifecycleOwner,
+        ) { _, bundleReceive ->
+            val newFolderName = bundleReceive.getString("new_folder_name")!!
+            _favoriteViewModel.updateFavoriteFolderName(
+                newFolderName,
+                _favoriteViewModel.selectFolder.value!!,
+            )
+            _favoriteViewModel.updateFavoriteRepository(
+                newFolderName,
+                _favoriteViewModel.selectFolder.value!!,
+            )
+        }
+    }
+
+    // フォルダ削除ダイアログ
+    private fun showDeleteFolderDialog() {
+        val dialog = DeleteFolderDialog()
+        val bundleSend =
+            Bundle().apply {
+                putString("current_folder_name", _favoriteViewModel.selectFolder.value)
+            }
+        dialog.arguments = bundleSend
+        dialog.show(childFragmentManager, "dialog")
+        childFragmentManager.setFragmentResultListener(
+            "request_key",
+            viewLifecycleOwner,
+        ) { _, bundleReceive ->
+            if (bundleReceive.getBoolean("click")) {
+                _favoriteViewModel.deleteFavoriteFolder(_favoriteViewModel.selectFolder.value!!)
+            }
         }
     }
 }

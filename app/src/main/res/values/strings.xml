@@ -4,24 +4,27 @@
     <string name="main_app_name">GitHubリポジトリ検索アプリ</string>
     <string name="main_btn_search">リポジトリ\n検索</string>
     <string name="main_btn_favorite">お気に入り\nリポジトリ</string>
-
     <string name="repository_list_search_hint">キーワードを入力</string>
     <string name="repository_list_btn_search">検索</string>
-
     <string name="repository_detail_favorite">お気に入り登録</string>
+    <string name="favorite_list_no_repository">保存したリポジトリはありません</string>
+    <string name="favorite_detail_btn_delete">お気に入りから削除</string>
+
     <string name="save_repository_message">保存するフォルダを選択してください</string>
     <string name="new_folder_create_message">お気に入りフォルダを新規作成します</string>
+    <string name="delete_folder_message">保存されたリポジトリも削除されます\nフォルダを削除しますか？</string>
 
     <string name="txt_ok">OK</string>
     <string name="txt_cancel">キャンセル</string>
     <string name="txt_folder_control">フォルダ管理</string>
     <string name="txt_new_folder">新規作成</string>
-    <string name="txt_folder_rename">フォルダ名変更</string>
+    <string name="txt_rename_folder">フォルダ名変更</string>
     <string name="txt_delete_folder">フォルダ削除</string>
     <string name="txt_input_folder_name">フォルダ名を入力</string>
+    <string name="txt_select_folder">選択中のフォルダ</string>
+    <string name="txt_new_folder_name">新しいフォルダ名</string>
 
-    <string name="favorite_list_no_repository">保存したリポジトリはありません</string>
-    <string name="favorite_list_select_folder">選択中のフォルダ</string>
 
-    <string name="favorite_detail_btn_delete">お気に入りから削除</string>
+
+
 </resources>

@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentRepositoryListBinding
 import com.example.repositorysearchapplication.model.adapter.RepositoryListAdapter
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
@@ -115,8 +114,10 @@ class RepositoryListFragment : Fragment() {
         adapter.setOnItemClickListener(
             object : RepositoryListAdapter.OnRepositoryItemClickListener {
                 override fun onItemClick(data: RepositoryEntity) {
-                    _searchViewModel.selectRepository = data
-                    findNavController().navigate(R.id.action_repositoryListFragment_to_repositoryDetailFragment)
+//                    _searchViewModel.selectRepository = data
+//                    findNavController().navigate(R.id.action_repositoryListFragment_to_repositoryDetailFragment)
+                    val action = RepositoryListFragmentDirections.actionRepositoryListFragmentToRepositoryDetailFragment(data)
+                    findNavController().navigate(action)
                 }
             },
         )

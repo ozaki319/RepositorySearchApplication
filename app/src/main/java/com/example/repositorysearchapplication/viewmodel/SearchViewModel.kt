@@ -22,7 +22,8 @@ class SearchViewModel(
     var page: Int = 1
     val repositoryList = MutableLiveData<List<RepositoryEntity>>()
     val searchStatus = MutableLiveData<Boolean>()
-    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
+
+//    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
     var favoriteFolderList: List<String> = listOf()
 
     // ViewModelのイベントを通知するFlow
@@ -64,12 +65,26 @@ class SearchViewModel(
     }
 
     // お気に入りフォルダを新規作成するメソッド
-    fun insertNewFavoriteFolder(folderName: String) {
+//    fun insertNewFavoriteFolder(folderName: String) {
+//        viewModelScope.launch {
+//            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
+//            if (check) {
+//                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+//                insertFavoriteRepository(selectRepository, folderName)
+//            } else {
+//                channelNgNewFolder.send(1)
+//            }
+//        }
+//    }
+    fun insertNewFavoriteFolder(
+        folderName: String,
+        data: RepositoryEntity,
+    ) {
         viewModelScope.launch {
             val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
             if (check) {
                 _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
-                insertFavoriteRepository(selectRepository, folderName)
+                insertFavoriteRepository(data, folderName)
             } else {
                 channelNgNewFolder.send(1)
             }

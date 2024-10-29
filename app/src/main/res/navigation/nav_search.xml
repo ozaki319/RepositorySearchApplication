@@ -12,11 +12,20 @@
         tools:layout="@layout/fragment_repository_list">
         <action
             android:id="@+id/action_repositoryListFragment_to_repositoryDetailFragment"
-            app:destination="@id/repositoryDetailFragment" />
+            app:destination="@id/repositoryDetailFragment" >
+            <argument
+                android:name="select_repository"
+                app:argType="com.example.repositorysearchapplication.model.database.RepositoryEntity" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/repositoryDetailFragment"
         android:name="com.example.repositorysearchapplication.view.search.RepositoryDetailFragment"
         android:label="fragment_repository_detail"
-        tools:layout="@layout/fragment_repository_detail" />
+        tools:layout="@layout/fragment_repository_detail">
+        <argument
+            android:name="select_repository"
+            app:argType="com.example.repositorysearchapplication.model.database.RepositoryEntity" />
+    </fragment>
+
 </navigation>

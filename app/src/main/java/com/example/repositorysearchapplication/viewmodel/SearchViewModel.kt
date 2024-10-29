@@ -23,7 +23,7 @@ class SearchViewModel(
     val repositoryList = MutableLiveData<List<RepositoryEntity>>()
     val searchStatus = MutableLiveData<Boolean>()
 
-//    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
+    //    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
     var favoriteFolderList: List<String> = listOf()
 
     // ViewModelのイベントを通知するFlow

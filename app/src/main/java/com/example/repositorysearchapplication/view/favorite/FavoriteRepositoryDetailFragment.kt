@@ -12,6 +12,7 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.repositorysearchapplication.R
 import com.example.repositorysearchapplication.databinding.FragmentFavoriteRepositoryDetailBinding
@@ -23,6 +24,7 @@ class FavoriteRepositoryDetailFragment : Fragment() {
     private var _binding: FragmentFavoriteRepositoryDetailBinding? = null
     private val binding get() = _binding!!
     private val _favoriteViewModel: FavoriteViewModel by activityViewModels()
+    private val args: FavoriteRepositoryDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +43,12 @@ class FavoriteRepositoryDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // アバター画像、リポジトリ名をセット
-        binding.txtRepositoryName.text = _favoriteViewModel.selectRepository.fullName
-        binding.imgOwner.load(_favoriteViewModel.selectRepository.avatarUrl) {
+//        binding.txtRepositoryName.text = _favoriteViewModel.selectRepository.fullName
+//        binding.imgOwner.load(_favoriteViewModel.selectRepository.avatarUrl) {
+//            error(R.drawable.baseline_hide_image_24)
+//        }
+        binding.txtRepositoryName.text = args.selectRepository.fullName
+        binding.imgOwner.load(args.selectRepository.avatarUrl) {
             error(R.drawable.baseline_hide_image_24)
         }
 
@@ -70,7 +76,8 @@ class FavoriteRepositoryDetailFragment : Fragment() {
                 }
             }
         binding.wvRepositoryDetail.settings.javaScriptEnabled = true
-        binding.wvRepositoryDetail.loadUrl(_favoriteViewModel.selectRepository.htmlUrl)
+//        binding.wvRepositoryDetail.loadUrl(_favoriteViewModel.selectRepository.htmlUrl)
+        binding.wvRepositoryDetail.loadUrl(args.selectRepository.htmlUrl)
 
         // お気に入りから削除ボタンをクリックしたときの処理
         binding.btnDelete.setOnClickListener {
@@ -92,7 +99,8 @@ class FavoriteRepositoryDetailFragment : Fragment() {
             viewLifecycleOwner,
         ) { _, bundle ->
             if (bundle.getBoolean("click")) {
-                _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
+//                _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
+                _favoriteViewModel.deleteFavoriteRepository(args.selectRepository)
                 findNavController().popBackStack()
             }
         }

@@ -17,7 +17,8 @@ class FavoriteViewModel(
     private val _favoriteRepository = FavoriteRepository(application)
 
     val favoriteRepositoryList = MutableLiveData<List<RepositoryEntity>>()
-    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
+
+    //    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
     var favoriteFolderList: List<String> = listOf()
     val selectFolder = MutableLiveData<String>()
     var focusFolderName = ""

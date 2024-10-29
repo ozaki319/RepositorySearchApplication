@@ -116,7 +116,10 @@ class RepositoryListFragment : Fragment() {
                 override fun onItemClick(data: RepositoryEntity) {
 //                    _searchViewModel.selectRepository = data
 //                    findNavController().navigate(R.id.action_repositoryListFragment_to_repositoryDetailFragment)
-                    val action = RepositoryListFragmentDirections.actionRepositoryListFragmentToRepositoryDetailFragment(data)
+                    val action =
+                        RepositoryListFragmentDirections.actionRepositoryListFragmentToRepositoryDetailFragment(
+                            data,
+                        )
                     findNavController().navigate(action)
                 }
             },

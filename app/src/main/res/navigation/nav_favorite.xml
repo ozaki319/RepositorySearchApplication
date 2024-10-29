@@ -12,11 +12,19 @@
         tools:layout="@layout/fragment_favorite_repository_list">
         <action
             android:id="@+id/action_favoriteRepositoryListFragment_to_favoriteRepositoryDetailFragment"
-            app:destination="@id/favoriteRepositoryDetailFragment" />
+            app:destination="@id/favoriteRepositoryDetailFragment" >
+            <argument
+                android:name="selectRepository"
+                app:argType="com.example.repositorysearchapplication.model.database.RepositoryEntity" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/favoriteRepositoryDetailFragment"
         android:name="com.example.repositorysearchapplication.view.favorite.FavoriteRepositoryDetailFragment"
         android:label="fragment_favorite_repository_detail"
-        tools:layout="@layout/fragment_favorite_repository_detail" />
+        tools:layout="@layout/fragment_favorite_repository_detail" >
+        <argument
+            android:name="selectRepository"
+            app:argType="com.example.repositorysearchapplication.model.database.RepositoryEntity" />
+    </fragment>
 </navigation>

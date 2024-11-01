@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.repositorysearchapplication.model.database.FavoriteFolderEntity
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
 import com.example.repositorysearchapplication.model.repository.FavoriteRepository
 import com.example.repositorysearchapplication.model.repository.GetRepositoryDataRepository
@@ -65,12 +64,15 @@ class SearchViewModel(
     }
 
     // お気に入りフォルダを新規作成するメソッド
-//    fun insertNewFavoriteFolder(folderName: String) {
+//    fun insertNewFavoriteFolder(
+//        folderName: String,
+//        data: RepositoryEntity,
+//    ) {
 //        viewModelScope.launch {
 //            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
 //            if (check) {
 //                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
-//                insertFavoriteRepository(selectRepository, folderName)
+//                insertFavoriteRepository(data, folderName)
 //            } else {
 //                channelNgNewFolder.send(1)
 //            }
@@ -81,9 +83,8 @@ class SearchViewModel(
         data: RepositoryEntity,
     ) {
         viewModelScope.launch {
-            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
+            val check = _favoriteRepository.insertFavoriteFolder(folderName)
             if (check) {
-                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
                 insertFavoriteRepository(data, folderName)
             } else {
                 channelNgNewFolder.send(1)

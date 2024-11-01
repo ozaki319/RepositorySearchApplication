@@ -60,11 +60,22 @@ class FavoriteViewModel(
     }
 
     // お気に入りフォルダを新規作成するメソッド
+//    fun insertNewFavoriteFolder(folderName: String) {
+//        viewModelScope.launch {
+//            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
+//            if (check) {
+//                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
+//                focusFolderName = folderName
+//                channelUpdateFavoriteFolder.send(1)
+//            } else {
+//                channelNgNewFolder.send(1)
+//            }
+//        }
+//    }
     fun insertNewFavoriteFolder(folderName: String) {
         viewModelScope.launch {
-            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
+            val check = _favoriteRepository.insertFavoriteFolder(folderName)
             if (check) {
-                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
                 focusFolderName = folderName
                 channelUpdateFavoriteFolder.send(1)
             } else {
@@ -74,14 +85,29 @@ class FavoriteViewModel(
     }
 
     // お気に入りフォルダの名前を変更するメソッド
+//    fun updateFavoriteFolderName(
+//        newFolderName: String,
+//        currentFolderName: String,
+//    ) {
+//        viewModelScope.launch {
+//            val check = _favoriteRepository.countFavoriteFolder(newFolderName) < 1
+//            if (check) {
+//                _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
+//                updateFavoriteRepository(newFolderName, currentFolderName)
+//                focusFolderName = newFolderName
+//                channelUpdateFavoriteFolder.send(1)
+//            } else {
+//                channelNgRenameFolder.send(1)
+//            }
+//        }
+//    }
     fun updateFavoriteFolderName(
         newFolderName: String,
         currentFolderName: String,
     ) {
         viewModelScope.launch {
-            val check = _favoriteRepository.countFavoriteFolder(newFolderName) < 1
+            val check = _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
             if (check) {
-                _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
                 updateFavoriteRepository(newFolderName, currentFolderName)
                 focusFolderName = newFolderName
                 channelUpdateFavoriteFolder.send(1)

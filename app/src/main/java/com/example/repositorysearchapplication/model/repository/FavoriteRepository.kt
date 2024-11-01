@@ -1,6 +1,7 @@
 package com.example.repositorysearchapplication.model.repository
 
 import android.app.Application
+import androidx.room.withTransaction
 import com.example.repositorysearchapplication.model.database.AppDatabase
 import com.example.repositorysearchapplication.model.database.FavoriteFolderEntity
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
@@ -43,22 +44,47 @@ class FavoriteRepository(
         return favoriteFolderDAO.get()
     }
 
-    suspend fun countFavoriteFolder(folderName: String): Int {
-        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
-        return favoriteFolderDAO.count(folderName)
-    }
+//    suspend fun countFavoriteFolder(folderName: String): Int {
+//        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
+//        return favoriteFolderDAO.count(folderName)
+//    }
 
+    //    suspend fun updateFavoriteFolderName(
+//        newFolderName: String,
+//        currentFolderName: String,
+//    ) {
+//        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
+//        return favoriteFolderDAO.update(newFolderName, currentFolderName)
+//    }
     suspend fun updateFavoriteFolderName(
         newFolderName: String,
         currentFolderName: String,
-    ) {
+    ): Boolean {
+        var response = false
         val favoriteFolderDAO = _db.createFavoriteFolderDAO()
-        return favoriteFolderDAO.update(newFolderName, currentFolderName)
+        _db.withTransaction {
+            if (favoriteFolderDAO.count(newFolderName) < 1) {
+                favoriteFolderDAO.update(newFolderName, currentFolderName)
+                response = true
+            }
+        }
+        return response
     }
 
-    suspend fun insertFavoriteFolder(folderData: FavoriteFolderEntity) {
+    //    suspend fun insertFavoriteFolder(folderData: FavoriteFolderEntity) {
+//        val favoriteFolderDAO = _db.createFavoriteFolderDAO()
+//        return favoriteFolderDAO.insert(folderData)
+//    }
+    suspend fun insertFavoriteFolder(folderName: String): Boolean {
+        var response = false
         val favoriteFolderDAO = _db.createFavoriteFolderDAO()
-        return favoriteFolderDAO.insert(folderData)
+        _db.withTransaction {
+            if (favoriteFolderDAO.count(folderName) < 1) {
+                favoriteFolderDAO.insert(FavoriteFolderEntity(folderName))
+                response = true
+            }
+        }
+        return response
     }
 
     suspend fun deleteFavoriteFolder(folderData: FavoriteFolderEntity) {

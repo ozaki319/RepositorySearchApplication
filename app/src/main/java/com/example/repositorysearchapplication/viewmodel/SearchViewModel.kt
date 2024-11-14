@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.repositorysearchapplication.model.applicationservice.FavoriteApplicationService
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
-import com.example.repositorysearchapplication.model.repository.FavoriteRepository
 import com.example.repositorysearchapplication.model.repository.GetRepositoryDataRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,14 +15,12 @@ class SearchViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
     private val _getRepositoryDataRepository = GetRepositoryDataRepository()
-    private val _favoriteRepository = FavoriteRepository(application)
+    private val _favoriteApplicationService = FavoriteApplicationService(application)
 
     var searchWord: String = ""
     var page: Int = 1
     val repositoryList = MutableLiveData<List<RepositoryEntity>>()
     val searchStatus = MutableLiveData<Boolean>()
-
-    //    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
     var favoriteFolderList: List<String> = listOf()
 
     // ViewModelのイベントを通知するFlow
@@ -58,59 +56,34 @@ class SearchViewModel(
     // お気に入りフォルダリストを取得するメソッド
     fun getFavoriteFolderList() {
         viewModelScope.launch {
-            favoriteFolderList = _favoriteRepository.getFavoriteFolderName()
+            favoriteFolderList = _favoriteApplicationService.getFavoriteFolderList()
             channelGetFavoriteFolderList.send(1)
         }
     }
 
-    // お気に入りフォルダを新規作成するメソッド
-//    fun insertNewFavoriteFolder(
-//        folderName: String,
-//        data: RepositoryEntity,
-//    ) {
-//        viewModelScope.launch {
-//            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
-//            if (check) {
-//                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
-//                insertFavoriteRepository(data, folderName)
-//            } else {
-//                channelNgNewFolder.send(1)
-//            }
-//        }
-//    }
+    // GitHubリポジトリを作成済みフォルダにお気に入り登録するメソッド
+    fun insertFavoriteRepository(
+        folderName: String,
+        data: RepositoryEntity,
+    ) {
+        viewModelScope.launch {
+            _favoriteApplicationService.registerFavoriteRepository(folderName, data)
+            channelInsertFavoriteRepository.send(1)
+        }
+    }
+
+    // GitHubリポジトリを新規作成フォルダにお気に入り登録するメソッド
     fun insertNewFavoriteFolder(
         folderName: String,
         data: RepositoryEntity,
     ) {
         viewModelScope.launch {
-            val check = _favoriteRepository.insertFavoriteFolder(folderName)
+            val check = _favoriteApplicationService.registerFavoriteRepositoryIntoNewFolder(folderName, data)
             if (check) {
-                insertFavoriteRepository(data, folderName)
+                channelInsertFavoriteRepository.send(1)
             } else {
                 channelNgNewFolder.send(1)
             }
-        }
-    }
-
-    // お気に入り登録するメソッド
-    fun insertFavoriteRepository(
-        data: RepositoryEntity,
-        saveFolder: String,
-    ) {
-        viewModelScope.launch {
-            val saveData =
-                RepositoryEntity(
-                    data.id,
-                    data.fullName,
-                    data.login,
-                    data.language,
-                    data.stargazersCount,
-                    data.htmlUrl,
-                    data.avatarUrl,
-                    saveFolder,
-                )
-            _favoriteRepository.insertFavoriteRepository(saveData)
-            channelInsertFavoriteRepository.send(1)
         }
     }
 }

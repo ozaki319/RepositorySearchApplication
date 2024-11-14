@@ -103,8 +103,6 @@ class FavoriteRepositoryListFragment : Fragment() {
         adapter.setOnItemClickListener(
             object : RepositoryListAdapter.OnRepositoryItemClickListener {
                 override fun onItemClick(data: RepositoryEntity) {
-//                    _favoriteViewModel.selectRepository = data
-//                    findNavController().navigate(R.id.action_favoriteRepositoryListFragment_to_favoriteRepositoryDetailFragment)
                     val action =
                         FavoriteRepositoryListFragmentDirections
                             .actionFavoriteRepositoryListFragmentToFavoriteRepositoryDetailFragment(

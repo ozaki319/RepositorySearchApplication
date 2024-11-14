@@ -99,7 +99,6 @@ class FavoriteRepositoryDetailFragment : Fragment() {
             viewLifecycleOwner,
         ) { _, bundle ->
             if (bundle.getBoolean("click")) {
-//                _favoriteViewModel.deleteFavoriteRepository(_favoriteViewModel.selectRepository)
                 _favoriteViewModel.deleteFavoriteRepository(args.selectRepository)
                 findNavController().popBackStack()
             }

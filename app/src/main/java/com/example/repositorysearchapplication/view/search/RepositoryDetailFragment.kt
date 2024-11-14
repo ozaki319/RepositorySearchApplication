@@ -48,10 +48,6 @@ class RepositoryDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // アバター画像、リポジトリ名をセット
-//        binding.txtRepositoryName.text = _searchViewModel.selectRepository.fullName
-//        binding.imgOwner.load(_searchViewModel.selectRepository.avatarUrl) {
-//            error(R.drawable.baseline_hide_image_24)
-//        }
         binding.txtRepositoryName.text = args.selectRepository.fullName
         binding.imgOwner.load(args.selectRepository.avatarUrl) {
             error(R.drawable.baseline_hide_image_24)
@@ -69,7 +65,6 @@ class RepositoryDetailFragment : Fragment() {
                 }
             }
         binding.wvRepositoryDetail.settings.javaScriptEnabled = true
-//        binding.wvRepositoryDetail.loadUrl(_searchViewModel.selectRepository.htmlUrl)
         binding.wvRepositoryDetail.loadUrl(args.selectRepository.htmlUrl)
 
         // お気に入り登録ボタンをクリックしたときの処理
@@ -143,11 +138,10 @@ class RepositoryDetailFragment : Fragment() {
             viewLifecycleOwner,
         ) { _, bundleReceive ->
             if (bundleReceive.getBoolean("click")) {
-                val saveFolder = bundleReceive.getString("save_folder")!!
+                val folderName = bundleReceive.getString("save_folder")!!
                 _searchViewModel.insertFavoriteRepository(
-//                    _searchViewModel.selectRepository,
+                    folderName,
                     args.selectRepository,
-                    saveFolder,
                 )
             } else if (!bundleReceive.getBoolean("click")) {
                 showNewFolderDialog()

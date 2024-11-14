@@ -114,8 +114,6 @@ class RepositoryListFragment : Fragment() {
         adapter.setOnItemClickListener(
             object : RepositoryListAdapter.OnRepositoryItemClickListener {
                 override fun onItemClick(data: RepositoryEntity) {
-//                    _searchViewModel.selectRepository = data
-//                    findNavController().navigate(R.id.action_repositoryListFragment_to_repositoryDetailFragment)
                     val action =
                         RepositoryListFragmentDirections.actionRepositoryListFragmentToRepositoryDetailFragment(
                             data,

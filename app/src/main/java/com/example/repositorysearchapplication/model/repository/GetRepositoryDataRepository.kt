@@ -51,7 +51,7 @@ class GetRepositoryDataRepository {
                         stargazersCount,
                         htmlUrl,
                         avatarUrl,
-                        "",
+                        0,
                     ),
                 )
             }

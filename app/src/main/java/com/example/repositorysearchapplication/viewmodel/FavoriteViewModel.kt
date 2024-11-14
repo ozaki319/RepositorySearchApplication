@@ -4,9 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.repositorysearchapplication.model.database.FavoriteFolderEntity
+import com.example.repositorysearchapplication.model.applicationservice.FavoriteApplicationService
 import com.example.repositorysearchapplication.model.database.RepositoryEntity
-import com.example.repositorysearchapplication.model.repository.FavoriteRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -14,11 +13,9 @@ import kotlinx.coroutines.launch
 class FavoriteViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
-    private val _favoriteRepository = FavoriteRepository(application)
+    private val _favoriteApplicationService = FavoriteApplicationService(application)
 
     val favoriteRepositoryList = MutableLiveData<List<RepositoryEntity>>()
-
-    //    var selectRepository = RepositoryEntity("", "", "", "", "", "", "", "")
     var favoriteFolderList: List<String> = listOf()
     val selectFolder = MutableLiveData<String>()
     var focusFolderName = ""
@@ -37,7 +34,7 @@ class FavoriteViewModel(
     // お気に入りフォルダリストを取得するメソッド
     fun getFavoriteFolderList() {
         viewModelScope.launch {
-            favoriteFolderList = _favoriteRepository.getFavoriteFolderName()
+            favoriteFolderList = _favoriteApplicationService.getFavoriteFolderList()
             indexSelectFolder = favoriteFolderList.indexOf(focusFolderName)
             channelGetFavoriteFolderList.send(1)
             if (favoriteFolderList.isEmpty()) {
@@ -55,26 +52,14 @@ class FavoriteViewModel(
     fun getFavoriteFolderRepository(folderName: String) {
         viewModelScope.launch {
             favoriteRepositoryList.value =
-                _favoriteRepository.getFavoriteRepository(folderName)
+                _favoriteApplicationService.getFavoriteRepositoryList(folderName)
         }
     }
 
     // お気に入りフォルダを新規作成するメソッド
-//    fun insertNewFavoriteFolder(folderName: String) {
-//        viewModelScope.launch {
-//            val check = _favoriteRepository.countFavoriteFolder(folderName) < 1
-//            if (check) {
-//                _favoriteRepository.insertFavoriteFolder(FavoriteFolderEntity(folderName))
-//                focusFolderName = folderName
-//                channelUpdateFavoriteFolder.send(1)
-//            } else {
-//                channelNgNewFolder.send(1)
-//            }
-//        }
-//    }
     fun insertNewFavoriteFolder(folderName: String) {
         viewModelScope.launch {
-            val check = _favoriteRepository.insertFavoriteFolder(folderName)
+            val check = _favoriteApplicationService.insertFavoriteFolder(folderName)
             if (check) {
                 focusFolderName = folderName
                 channelUpdateFavoriteFolder.send(1)
@@ -85,30 +70,13 @@ class FavoriteViewModel(
     }
 
     // お気に入りフォルダの名前を変更するメソッド
-//    fun updateFavoriteFolderName(
-//        newFolderName: String,
-//        currentFolderName: String,
-//    ) {
-//        viewModelScope.launch {
-//            val check = _favoriteRepository.countFavoriteFolder(newFolderName) < 1
-//            if (check) {
-//                _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
-//                updateFavoriteRepository(newFolderName, currentFolderName)
-//                focusFolderName = newFolderName
-//                channelUpdateFavoriteFolder.send(1)
-//            } else {
-//                channelNgRenameFolder.send(1)
-//            }
-//        }
-//    }
     fun updateFavoriteFolderName(
         newFolderName: String,
         currentFolderName: String,
     ) {
         viewModelScope.launch {
-            val check = _favoriteRepository.updateFavoriteFolderName(newFolderName, currentFolderName)
+            val check = _favoriteApplicationService.updateFavoriteFolderName(newFolderName, currentFolderName)
             if (check) {
-                updateFavoriteRepository(newFolderName, currentFolderName)
                 focusFolderName = newFolderName
                 channelUpdateFavoriteFolder.send(1)
             } else {
@@ -117,21 +85,10 @@ class FavoriteViewModel(
         }
     }
 
-    // お気に入りリポジトリの保存フォルダ名を変更するメソッド
-    private fun updateFavoriteRepository(
-        newFolderName: String,
-        currentFolderName: String,
-    ) {
-        viewModelScope.launch {
-            _favoriteRepository.updateFavoriteRepository(newFolderName, currentFolderName)
-        }
-    }
-
     // お気に入りフォルダを削除するメソッド
     fun deleteFavoriteFolder(folderName: String) {
         viewModelScope.launch {
-            _favoriteRepository.deleteFavoriteFolder(FavoriteFolderEntity(folderName))
-            _favoriteRepository.deleteAllFavoriteRepository(folderName)
+            _favoriteApplicationService.deleteFavoriteFolder(folderName)
             focusFolderName = ""
             channelUpdateFavoriteFolder.send(1)
         }
@@ -140,7 +97,7 @@ class FavoriteViewModel(
     // お気に入りリポジトリをフォルダから削除するメソッド
     fun deleteFavoriteRepository(data: RepositoryEntity) {
         viewModelScope.launch {
-            _favoriteRepository.deleteFavoriteRepository(data)
+            _favoriteApplicationService.deleteFavoriteRepository(data)
         }
     }
 }

@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -25,6 +26,13 @@ class FavoriteRepositoryDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val _favoriteViewModel: FavoriteViewModel by activityViewModels()
     private val args: FavoriteRepositoryDetailFragmentArgs by navArgs()
+
+    // LiveDataのオブザーバクラス
+    private inner class DbReadyObserver : Observer<Boolean> {
+        override fun onChanged(value: Boolean) {
+            binding.btnDelete.isEnabled = value
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,11 +50,13 @@ class FavoriteRepositoryDetailFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
+        // LiveDataにオブザーバを登録
+        _favoriteViewModel.dbReady.observe(
+            viewLifecycleOwner,
+            DbReadyObserver(),
+        )
+
         // アバター画像、リポジトリ名をセット
-//        binding.txtRepositoryName.text = _favoriteViewModel.selectRepository.fullName
-//        binding.imgOwner.load(_favoriteViewModel.selectRepository.avatarUrl) {
-//            error(R.drawable.baseline_hide_image_24)
-//        }
         binding.txtRepositoryName.text = args.selectRepository.fullName
         binding.imgOwner.load(args.selectRepository.avatarUrl) {
             error(R.drawable.baseline_hide_image_24)

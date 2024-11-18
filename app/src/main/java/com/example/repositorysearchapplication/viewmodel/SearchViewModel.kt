@@ -22,6 +22,7 @@ class SearchViewModel(
     val repositoryList = MutableLiveData<List<RepositoryEntity>>()
     val searchStatus = MutableLiveData<Boolean>()
     var favoriteFolderList: List<String> = listOf()
+    val dbReady = MutableLiveData<Boolean>()
 
     // ViewModelのイベントを通知するFlow
     private val channelGetFavoriteFolderList = Channel<Int>(capacity = Channel.UNLIMITED)
@@ -56,8 +57,10 @@ class SearchViewModel(
     // お気に入りフォルダリストを取得するメソッド
     fun getFavoriteFolderList() {
         viewModelScope.launch {
+            dbReady.value = false
             favoriteFolderList = _favoriteApplicationService.getFavoriteFolderList()
             channelGetFavoriteFolderList.send(1)
+            dbReady.value = true
         }
     }
 
@@ -67,8 +70,10 @@ class SearchViewModel(
         data: RepositoryEntity,
     ) {
         viewModelScope.launch {
+            dbReady.value = false
             _favoriteApplicationService.registerFavoriteRepository(folderName, data)
             channelInsertFavoriteRepository.send(1)
+            dbReady.value = true
         }
     }
 
@@ -78,12 +83,14 @@ class SearchViewModel(
         data: RepositoryEntity,
     ) {
         viewModelScope.launch {
+            dbReady.value = false
             val check = _favoriteApplicationService.registerFavoriteRepositoryIntoNewFolder(folderName, data)
             if (check) {
                 channelInsertFavoriteRepository.send(1)
             } else {
                 channelNgNewFolder.send(1)
             }
+            dbReady.value = true
         }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
@@ -31,6 +32,13 @@ class RepositoryDetailFragment : Fragment() {
     private val _searchViewModel: SearchViewModel by activityViewModels()
     private val args: RepositoryDetailFragmentArgs by navArgs()
 
+    // LiveDataのオブザーバクラス
+    private inner class DbReadyObserver : Observer<Boolean> {
+        override fun onChanged(value: Boolean) {
+            binding.btnFavorite.isEnabled = value
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +54,12 @@ class RepositoryDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        // LiveDataにオブザーバを登録
+        _searchViewModel.dbReady.observe(
+            viewLifecycleOwner,
+            DbReadyObserver(),
+        )
 
         // アバター画像、リポジトリ名をセット
         binding.txtRepositoryName.text = args.selectRepository.fullName

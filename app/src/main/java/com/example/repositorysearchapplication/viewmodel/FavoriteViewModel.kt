@@ -20,6 +20,7 @@ class FavoriteViewModel(
     val selectFolder = MutableLiveData<String>()
     var focusFolderName = ""
     var indexSelectFolder = 0
+    val dbReady = MutableLiveData<Boolean>()
 
     // ViewModelのイベントを通知するFlow
     private val channelGetFavoriteFolderList = Channel<Int>(capacity = Channel.UNLIMITED)
@@ -34,12 +35,14 @@ class FavoriteViewModel(
     // お気に入りフォルダリストを取得するメソッド
     fun getFavoriteFolderList() {
         viewModelScope.launch {
+            dbReady.value = false
             favoriteFolderList = _favoriteApplicationService.getFavoriteFolderList()
             indexSelectFolder = favoriteFolderList.indexOf(focusFolderName)
             channelGetFavoriteFolderList.send(1)
             if (favoriteFolderList.isEmpty()) {
                 selectFolder.value = ""
             }
+            dbReady.value = true
         }
     }
 
@@ -51,14 +54,17 @@ class FavoriteViewModel(
     // 選択されたフォルダのリポジトリリストを取得するメソッド
     fun getFavoriteFolderRepository(folderName: String) {
         viewModelScope.launch {
+            dbReady.value = false
             favoriteRepositoryList.value =
                 _favoriteApplicationService.getFavoriteRepositoryList(folderName)
+            dbReady.value = true
         }
     }
 
     // お気に入りフォルダを新規作成するメソッド
     fun insertNewFavoriteFolder(folderName: String) {
         viewModelScope.launch {
+            dbReady.value = false
             val check = _favoriteApplicationService.insertFavoriteFolder(folderName)
             if (check) {
                 focusFolderName = folderName
@@ -66,6 +72,7 @@ class FavoriteViewModel(
             } else {
                 channelNgNewFolder.send(1)
             }
+            dbReady.value = true
         }
     }
 
@@ -75,29 +82,39 @@ class FavoriteViewModel(
         currentFolderName: String,
     ) {
         viewModelScope.launch {
-            val check = _favoriteApplicationService.updateFavoriteFolderName(newFolderName, currentFolderName)
+            dbReady.value = false
+            val check =
+                _favoriteApplicationService.updateFavoriteFolderName(
+                    newFolderName,
+                    currentFolderName,
+                )
             if (check) {
                 focusFolderName = newFolderName
                 channelUpdateFavoriteFolder.send(1)
             } else {
                 channelNgRenameFolder.send(1)
             }
+            dbReady.value = true
         }
     }
 
     // お気に入りフォルダを削除するメソッド
     fun deleteFavoriteFolder(folderName: String) {
         viewModelScope.launch {
+            dbReady.value = false
             _favoriteApplicationService.deleteFavoriteFolder(folderName)
             focusFolderName = ""
             channelUpdateFavoriteFolder.send(1)
+            dbReady.value = true
         }
     }
 
     // お気に入りリポジトリをフォルダから削除するメソッド
     fun deleteFavoriteRepository(data: RepositoryEntity) {
         viewModelScope.launch {
+            dbReady.value = false
             _favoriteApplicationService.deleteFavoriteRepository(data)
+            dbReady.value = true
         }
     }
 }

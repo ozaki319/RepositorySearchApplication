@@ -47,6 +47,12 @@ class FavoriteRepositoryListFragment : Fragment() {
         }
     }
 
+    private inner class DbReadyObserver : Observer<Boolean> {
+        override fun onChanged(value: Boolean) {
+            binding.spnFolder.isEnabled = value
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,6 +67,12 @@ class FavoriteRepositoryListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        // LiveDataにオブザーバを登録
+        _favoriteViewModel.dbReady.observe(
+            viewLifecycleOwner,
+            DbReadyObserver(),
+        )
 
         // LiveDataにオブザーバを登録
         _favoriteViewModel.selectFolder.observe(
